@@ -88,3 +88,17 @@ textarea {
   border-radius: 8px;
   line-height: 1.6;
 }
+button.generate,
+button.copy,
+a.goto {
+  width: 100%;
+  display: block;
+  padding: 16px;
+  margin-top: 12px;
+  border-radius: 12px;
+  background: #d8c4a3;
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+}
