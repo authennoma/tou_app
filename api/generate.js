@@ -1,72 +1,52 @@
-import OpenAI from "openai";
+const prompt = `
+あなたは【ヘッドスパ専門店の口コミ文を作る専門ライター】です。
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+以下のアンケート内容【事実のみ】を使い、
+記載されていない内容は絶対に書かず、空欄部分は無視してください。
+AIが推測で書くことは禁止です。
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+■事実として使ってよい情報は以下の入力だけ：
+・メニュー
+・良かった点（チェックされた内容のみ）
+・変化を感じた点（チェックされた内容のみ）
+・当日の印象（チェックされた内容のみ）
+・改善点
+・その他メッセージ
 
-  try {
-    const {
-      menu = "",
-      goodPoints = [],
-      changes = [],
-      impressions = [],
-      improvement = "",
-      message = "",
-    } = req.body || {};
+■禁止ルール（絶対に守る）
+・チェックされていない内容は書かない
+・空欄の内容を勝手に補わない
+・お客様が言っていない体験を捏造しない
+・飲食店・レストラン・料理・ヘアサロンに関する記述は禁止
+・スパ・頭浸浴・リラックス・首肩コリ改善・接客・空間 の範囲のみ使用
 
-    const prompt = `
-あなたは【ヘッドスパ専門店の口コミ文章を作成するプロライター】です。
-
-以下のお客様のアンケート内容をもとに、
-【ヘッドスパの口コミとして自然・丁寧・具体的な文章】を作成してください。
-
-絶対に飲食店・レストラン・美容院の内容にはしないこと。
-ヘッドスパ・頭浸浴・リラックス・首肩コリ・空間・接客に限定すること。
-
------------------------------
-■メニュー
+--------------------------------
+【メニュー】
 ${menu}
 
-■良かった点
+【良かった点】
 ${goodPoints.join("、")}
 
-■変化を感じた点
+【変化を感じた点】
 ${changes.join("、")}
 
-■体感した印象
+【印象】
 ${impressions.join("、")}
 
-■改善点
+【改善点】
 ${improvement}
 
-■その他メッセージ
+【その他メッセージ】
 ${message}
------------------------------
+--------------------------------
 
-【条件】
-・50〜120文字
-・優しい口調
-・初めての人でもイメージしやすい内容
+■文章の条件
+・事実のみで構成する
+・嘘を書かない
+・空欄部分は言及しない
+・80〜120文字
+・優しく丁寧
 ・「また利用したい」で自然に締める
-・過剰な宣伝は禁止
-・飲食店の要素が入った場合は自動でヘッドスパ内容に修正する
+
+上記【事実のみ】を使って、ヘッドスパの口コミ文をひとつ作成してください。
 `;
-
-    const completion = await client.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }],
-    });
-
-    const text = completion.choices?.[0]?.message?.content?.trim() || "";
-
-    return res.status(200).json({ review: text });
-  } catch (error) {
-    console.error("API Error:", error);
-    return res.status(500).json({ error: "口コミ生成に失敗しました。" });
-  }
-}
