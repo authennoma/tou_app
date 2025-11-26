@@ -1,52 +1,83 @@
-const prompt = `
-あなたは【ヘッドスパ専門店の口コミ文を作る専門ライター】です。
+import OpenAI from "openai";
 
-以下のアンケート内容【事実のみ】を使い、
-記載されていない内容は絶対に書かず、空欄部分は無視してください。
-AIが推測で書くことは禁止です。
+// クライアントは関数の外で1回だけ作成
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-■事実として使ってよい情報は以下の入力だけ：
-・メニュー
-・良かった点（チェックされた内容のみ）
-・変化を感じた点（チェックされた内容のみ）
-・当日の印象（チェックされた内容のみ）
-・改善点
-・その他メッセージ
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
-■禁止ルール（絶対に守る）
-・チェックされていない内容は書かない
-・空欄の内容を勝手に補わない
-・お客様が言っていない体験を捏造しない
-・飲食店・レストラン・料理・ヘアサロンに関する記述は禁止
-・スパ・頭浸浴・リラックス・首肩コリ改善・接客・空間 の範囲のみ使用
+  try {
+    const {
+      goodPoints = [],
+      changes = [],
+      impressions = [],
+      improvement = "",
+      message = "",
+    } = req.body || {};
+
+    const goodPointsText = Array.isArray(goodPoints)
+      ? goodPoints.join("、")
+      : String(goodPoints || "");
+
+    const changesText = Array.isArray(changes)
+      ? changes.join("、")
+      : String(changes || "");
+
+    const impressionsText = Array.isArray(impressions)
+      ? impressions.join("、")
+      : String(impressions || "");
+
+    const prompt = `
+あなたは【ヘッドスパ専門店の口コミ文章を作成するプロライター】です。
+
+以下のお客様アンケートをもとに、
+【ヘッドスパの口コミとして自然で丁寧・具体的な文章】を作成してください。
+
+※絶対に飲食店・美容院・レストランの内容を書かないこと。
+※必ずアンケート内容を反映し、架空の内容を追加しないこと。
+※ヘッドスパに関する内容（頭浸浴・首肩コリ・リラックス・空間など）に限定する。
 
 --------------------------------
-【メニュー】
-${menu}
+■良かった点
+${goodPointsText}
 
-【良かった点】
-${goodPoints.join("、")}
+■感じた変化
+${changesText}
 
-【変化を感じた点】
-${changes.join("、")}
+■印象・感想
+${impressionsText}
 
-【印象】
-${impressions.join("、")}
-
-【改善点】
+■改善点
 ${improvement}
 
-【その他メッセージ】
+■その他メッセージ
 ${message}
 --------------------------------
 
-■文章の条件
-・事実のみで構成する
-・嘘を書かない
-・空欄部分は言及しない
-・80〜120文字
-・優しく丁寧
-・「また利用したい」で自然に締める
+【書き方の条件】
+・自然で読みやすい日本語
+・初めて読む人にも内容が伝わる
+・過度に誇張しない
+・ヘッドスパ体験に関する内容のみ
+・80〜140文字程度
 
-上記【事実のみ】を使って、ヘッドスパの口コミ文をひとつ作成してください。
+では上記をもとに、ヘッドスパの口コミ文を1つ作成してください。
 `;
+
+    const completion = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [{ role: "user", content: prompt }],
+    });
+
+    const text = completion.choices?.[0]?.message?.content?.trim() || "";
+
+    return res.status(200).json({ review: text });
+  } catch (error) {
+    console.error("API Error:", error);
+    return res.status(500).json({ error: "口コミ生成に失敗しました。" });
+  }
+}
