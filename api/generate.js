@@ -24,41 +24,36 @@ export default async function handler(req, res) {
       ? selectedGoodPoints.join("、")
       : String(selectedGoodPoints || "");
 
-    const prompt = `
-以下の内容からGoogle口コミ用の文章を、自然で丁寧な日本語で作成してください。
+   const prompt = `
+あなたは【ヘッドスパ専門店の口コミ文章を作成するプロライター】です。
 
-【メニュー】
-${menu}
+以下のお客様のアンケート内容をもとに、
+【ヘッドスパの口コミとして自然・丁寧・具体的な文章】を作成してください。
 
-【良かった点】
+絶対に飲食店・レストラン・美容院の内容にはしないこと。
+スパ施術・リラックス・頭浸浴・首肩コリ・接客・空間など
+ヘッドスパに関する内容に限定してください。
+
+--------------------------------
+
+■良かった点
 ${goodPointsText}
 
-【改善点】
+■改善点
 ${selectedImprovements}
 
-【その他メッセージ】
+■その他メッセージ
 ${message}
+--------------------------------
 
-【条件】
-・過度に褒めすぎず、実際に体験したお客様目線
-・200文字以内
-・2〜3文程度で読みやすく
+【書き方の条件】
+・実際に受けたヘッドスパの口コミとして自然に
+・飲食店・料理などには絶対触れない
+・50〜120文字程度
+・優しい口調で
+・初めての人が読んでもイメージできる内容
+・「また利用したい」と自然に思える締め方
+・過剰な宣伝は禁止
+
+では、上記情報をもとにヘッドスパの口コミ文を1つ作成してください。
 `;
-
-    // ★ ここを responses ではなく chat.completions に変更 ★
-    const completion = await client.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }],
-    });
-
-    const text = completion.choices?.[0]?.message?.content?.trim() || "";
-
-    // フロントが data.review を読む想定に合わせる
-    return res.status(200).json({ review: text });
-  } catch (error) {
-    console.error("API Error:", error);
-    return res
-      .status(500)
-      .json({ error: "口コミ生成に失敗しました。" });
-  }
-}
