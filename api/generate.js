@@ -38,7 +38,8 @@ ${message}
       messages: [{ role: "user", content: prompt }],
     });
 
-    const text = response.choices[0].message.content;
+    // ← ここが重要！
+    const text = response.choices[0].message;
 
     return res.status(200).json({ text });
   } catch (error) {
