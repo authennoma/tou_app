@@ -1,7 +1,6 @@
 // /api/generate.js
 import OpenAI from "openai";
 
-// クライアントは関数の外で1回だけ作成
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -12,52 +11,75 @@ export default async function handler(req, res) {
   }
 
   try {
-    // body が undefined でも落ちないように保険をかける
     const {
       menu = "",
-      selectedGoodPoints = [],
-      selectedImprovements = "",
+      goodPoints = [],
+      changes = [],
+      impressions = [],
+      improvement = "",
       message = "",
     } = req.body || {};
 
-    const goodPointsText = Array.isArray(selectedGoodPoints)
-      ? selectedGoodPoints.join("、")
-      : String(selectedGoodPoints || "");
+    const goodPointsText = Array.isArray(goodPoints)
+      ? goodPoints.join("、")
+      : "";
 
-   const prompt = `const prompt = `
+    const changesText = Array.isArray(changes)
+      ? changes.join("、")
+      : "";
+
+    const impressionsText = Array.isArray(impressions)
+      ? impressions.join("、")
+      : "";
+
+    const prompt = `
 あなたは【ヘッドスパ専門店の口コミ文章を作成するプロライター】です。
 
 以下のお客様のアンケート内容をもとに、
 【ヘッドスパの口コミとして自然・丁寧・具体的な文章】を作成してください。
 
 絶対に飲食店・レストラン・美容院の内容にはしないこと。
-スパ施術・リラックス・頭浸浴・首肩コリ・接客・空間など
-ヘッドスパに関する内容に限定してください。
+ヘッドスパ・頭浸浴・リラックス・首肩コリ・空間・接客に限定すること。
 
---------------------------------
+-----------------------------
 ■メニュー
 ${menu}
 
 ■良かった点
 ${goodPointsText}
 
+■変化を感じた点
+${changesText}
+
+■体感した印象
+${impressionsText}
+
 ■改善点
-${selectedImprovements}
+${improvement}
 
 ■その他メッセージ
 ${message}
---------------------------------
+-----------------------------
 
-【書き方の条件】
-・実際に受けたヘッドスパの口コミとして自然に
-・飲食店・料理などには絶対触れない
-・50〜120文字程度
-・優しい口調で
-・初めての人が読んでもイメージできる内容
-・「また利用したい」と自然に思える締め方
+【条件】
+・50〜120文字
+・優しい口調
+・初めての人でもイメージしやすい内容
+・「また利用したい」で自然に締める
 ・過剰な宣伝は禁止
-・もし内容が飲食店っぽくなった場合は書き換えてヘッドスパの内容に修正する
-
-では、上記情報をもとにヘッドスパの口コミ文を1つ作成してください。
+・飲食店の要素が入った場合は自動でヘッドスパ内容に修正する
 `;
 
+    const completion = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [{ role: "user", content: prompt }],
+    });
+
+    const text = completion.choices?.[0]?.message?.content?.trim() || "";
+
+    return res.status(200).json({ review: text });
+  } catch (error) {
+    console.error("API Error:", error);
+    return res.status(500).json({ error: "口コミ生成に失敗しました。" });
+  }
+}
