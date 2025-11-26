@@ -1,7 +1,13 @@
+// -----------------------------
+// チェックされた値を取得
+// -----------------------------
 function getCheckedValues(id) {
   return [...document.querySelectorAll(`#${id} input:checked`)].map(el => el.value);
 }
 
+// -----------------------------
+// 口コミ生成のメイン処理
+// -----------------------------
 function generateReview() {
   const good = getCheckedValues("goodPoints");
   const changes = getCheckedValues("changes");
@@ -10,144 +16,116 @@ function generateReview() {
   const improvement = document.getElementById("improvement").value.trim();
   const message = document.getElementById("message").value.trim();
 
-  // イントロ
+  // ---- ランダム文章 ----
   const introTemplates = [
     "本日は素敵な施術をありがとうございました。",
-    "今日は丁寧に施術していただき、とても癒されました。",
-    "しっかり整えていただき、心からリラックスできました。"
+    "今日は丁寧な施術をしていただき、とても癒されました。",
+    "落ち着いた空間で受けた施術がとても心地よかったです。"
   ];
-  const intro = pick(introTemplates);
 
-  // 良かった施術
+  const endTemplates = [
+    "またぜひお願いしたいと思います。",
+    "次回も楽しみにしています。",
+    "また伺わせていただきます。"
+  ];
+
+  const connectWords = [
+    "また、", "そして、", "その上で、",
+    "特に印象的だったのは、", "気づいたら、", "さらに、"
+  ];
+  const randomConnect = () => connectWords[Math.floor(Math.random() * connectWords.length)];
+
+  // ---- 良かった施術フレーズ ----
   const goodPhrases = {
-    "頭浸浴": [
-      "頭浸浴の温かさが身体にスッと染み込んで",
-      "頭浸浴で一気に力が抜けて",
-      "頭浸浴のリラックス感が本当に心地よくて"
-    ],
-    "デコルテ": [
-      "デコルテの圧加減が絶妙で",
-      "デコルテ周りの流れが良くなるのを感じて",
-      "デコルテの丁寧な施術がとても気持ちよくて"
-    ],
-    "フェイスマッサージ": [
-      "フェイスマッサージの優しい圧が心地よくて",
-      "フェイスラインがスッキリして",
-      "表情が軽くなるようなフェイスマッサージで"
-    ],
-    "ヘッドマッサージ": [
-      "ヘッドマッサージの圧がちょうど良くて",
-      "頭皮がしっかり動くのを感じて",
-      "コリにピンポイントで届くヘッドマッサージが最高で"
-    ],
-    "リンパケア": [
-      "リンパケアで巡りが良くなり",
-      "むくみがスッと流れていく感じがあって",
-      "リンパの流れが整う感覚が心地よくて"
-    ],
-    "足湯": [
-      "足湯で全身がふわっと温まり",
-      "足湯でリラックスモードに切り替わって",
-      "足湯の心地よさで一気に力が抜けて"
-    ],
-    "鎖骨ほぐし": [
-      "鎖骨まわりがスッと軽くなり",
-      "鎖骨のつまりが流れていくようで",
-      "鎖骨周りの流れが良くなるのを感じて"
-    ],
-    "深層筋アプローチ": [
-      "深層筋までしっかり届く圧で",
-      "深いところまでじんわりほぐれて",
-      "深層筋のコリが和らぐのを感じて"
-    ],
-    "眼精疲労ケア": [
-      "眼の周りの疲れがスッと抜けて",
-      "視界が明るくなるようで",
-      "眼精疲労が軽くなって"
-    ],
-    "マイクロスコープ": [
-      "マイクロスコープで状態を知れたのも良くて",
-      "頭皮状態を見ながら施術してもらえて安心感があり",
-      "説明がとても分かりやすくて"
-    ]
+    "頭浸浴": ["頭浸浴の温かさがとても心地よく", "頭浸浴のリラックス感が素晴らしく", "頭浸浴で一気に呼吸が深くなり"],
+    "デコルテ": ["デコルテの圧が絶妙で", "デコルテケアがとても丁寧で", "デコルテまわりの流れが良くなって"],
+    "フェイスマッサージ": ["フェイスマッサージが本当に気持ちよく", "フェイスラインがスッキリして", "優しいフェイスマッサージが心地よく"],
+    "ヘッドマッサージ": ["ヘッドマッサージがとても丁寧で", "頭皮のほぐされ方が絶妙で", "ヘッドマッサージの圧が最高で"],
+    "リンパケア": ["リンパの流れが整っていく感覚があり", "リンパケアでむくみがスッと引いて", "巡りが良くなったのを感じて"],
+    "足湯": ["足湯で全身が温まり", "足湯の温度が心地よくて", "足湯でリラックスモードに切り替わり"],
+    "鎖骨ほぐし": ["鎖骨まわりがスッと軽くなり", "鎖骨のつまりが流れていく感覚があり", "鎖骨ほぐしが特に気持ちよく"],
+    "深層筋アプローチ": ["深層筋にしっかり届く圧で", "深いところまでほぐれるのが心地よく", "深層筋のコリがじんわり和らぎ"],
+    "眼精疲労ケア": ["眼のまわりの疲れがスッと抜けて", "眼精疲労が軽くなり", "視界が明るくなるようで"],
+    "マイクロスコープ": ["マイクロスコープの説明がわかりやすく", "頭皮状態を見ながら施術してもらえて", "マイクロスコープで状態を知れたのも良くて"]
   };
 
-  // 変化
+  // ---- 変化フレーズ ----
   const changePhrases = {
     "頭が軽くなった": "施術後は頭がふわっと軽くなり",
-    "目が開きやすくなった": "視界も明るくなったように感じて",
+    "目が開きやすくなった": "視界が明るくなったように感じ",
     "顔色が明るくなった": "顔色もワントーン明るくなり",
     "姿勢が良くなった": "自然と姿勢が整ったような感覚があり",
     "呼吸が深くなった": "呼吸が深くスッと入るようになり",
     "むくみが取れた": "むくみもスッキリして",
-    "熟睡できた": "その日の夜はぐっすり眠れて",
-    "体がポカポカした": "身体が内側からぽかぽか温まり",
+    "熟睡できた": "施術後はぐっすり眠れて",
+    "体がポカポカした": "身体が内側から温まり",
     "頭皮が柔らかくなった": "頭皮も柔らかくなり",
-    "顔が上がった": "フェイスラインもキュッと上がり",
+    "顔が上がった": "フェイスラインがキュッと上がり",
     "首肩のコリが楽になった": "首肩の重さもふっと軽くなりました"
   };
 
-  // 印象
+  // ---- 印象フレーズ ----
   const feelPhrases = {
     "清潔感がある": "サロン全体もとても清潔で、",
-    "落ち着いた照明": "照明の柔らかさが心地よく、",
-    "香りが良い": "ふわっと広がるアロマがとても良い香りで、",
-    "丁寧なカウンセリング": "カウンセリングも丁寧で、",
-    "上品な空間": "上品で落ち着いた空間が広がっていて、",
-    "プライベート感がある": "完全プライベートの特別感があって、",
-    "気遣いが良い": "細やかな気遣いも嬉しくて、",
-    "静かでリラックスできた": "静かで心からリラックスできて、",
+    "落ち着いた照明": "照明の明るさがちょうど良く、",
+    "香りが良い": "ふわっと香るアロマが心地よく、",
+    "丁寧なカウンセリング": "カウンセリングもとても丁寧で、",
+    "上品な空間": "上品で落ち着いた空間で、",
+    "プライベート感がある": "完全プライベートの特別感があり、",
+    "気遣いが良い": "細やかな気遣いも嬉しく、",
+    "静かでリラックスできた": "静かで心からリラックスでき、",
     "温度や湿度がちょうど良い": "室温も湿度も心地よく、",
-    "時間配分がちょうど良い": "時間配分もちょうど良くて、"
+    "時間配分がちょうど良い": "時間配分も絶妙で、"
   };
 
-  // --- 組み立て ---
-  let review = intro + "\n\n";
+  // -----------------------------
+  // 文の組み立て
+  // -----------------------------
+  const intro = introTemplates[Math.floor(Math.random() * introTemplates.length)];
 
-  if (good.length > 0) {
-    const goodText = good
-      .map(g => pick(goodPhrases[g]))
-      .join("、");
+  const goodSentences = good.map(g =>
+    goodPhrases[g][Math.floor(Math.random() * goodPhrases[g].length)]
+  );
 
-    review += `特に、${goodText}ところが印象的でした。\n`;
+  const changeSentences = changes.map(c => changePhrases[c]);
+  const feelSentences = feels.map(f => feelPhrases[f]);
+
+  // 段落 1
+  let paragraph1 = intro;
+  if (goodSentences.length > 0) {
+    paragraph1 += "\n\n" + randomConnect() + goodSentences.join("、") + "ところが良かったです。";
   }
 
-  if (changes.length > 0) {
-    const changeText = changes.map(c => changePhrases[c]).join("、");
-    review += `${changeText}。\n`;
+  // 段落 2
+  let paragraph2 = "";
+  if (changeSentences.length > 0) {
+    paragraph2 += randomConnect() + changeSentences.join("、") + "と感じました。";
   }
 
-  if (feels.length > 0) {
-    const feelText = feels.map(f => feelPhrases[f]).join("");
-    review += `${feelText}とても快適に過ごせました。\n`;
+  // 段落 3
+  let paragraph3 = "";
+  if (feelSentences.length > 0) {
+    paragraph3 += feelSentences.join("") + "とても快適に過ごせました。";
   }
 
-  if (improvement) {
-    review += `\n【改善点】${improvement}\n`;
-  }
+  // 最終文章
+  let review = `${paragraph1}\n\n${paragraph2}\n\n${paragraph3}\n`;
 
-  if (message) {
-    review += `\n【メッセージ】${message}\n`;
-  }
+  if (improvement) review += `\n【改善点】${improvement}`;
+  if (message) review += `\n【メッセージ】${message}`;
 
-  const ending = [
-    "またぜひお願いしたいと思います。",
-    "次回伺うのが今から楽しみです。",
-    "また利用させていただきます。"
-  ];
-  review += "\n" + pick(ending);
+  review += `\n${endTemplates[Math.floor(Math.random() * endTemplates.length)]}`;
 
+  // 出力
   document.getElementById("reviewText").innerText = review;
   document.getElementById("resultSection").classList.remove("hidden");
 }
 
-function pick(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
+// -----------------------------
+// コピー処理
+// -----------------------------
 function copyText() {
-  navigator.clipboard.writeText(
-    document.getElementById("reviewText").innerText
-  );
+  const text = document.getElementById("reviewText").innerText;
+  navigator.clipboard.writeText(text);
   alert("コピーしました！");
 }
