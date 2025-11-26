@@ -54,26 +54,27 @@ textarea {
   box-sizing: border-box;
 }
 
-.generate,
-.copy,
-.goto {
+/* ---------------------------
+   🔥 ボタンはここに統一
+---------------------------- */
+button,
+a.goto {
   width: 100%;
-  padding: 14px;
+  display: block;
+  padding: 16px;
   border: none;
-  background: #d7c7a2;
+  background: #d8c4a3;
   color: #fff;
-  border-radius: 8px;
-  margin-bottom: 16px;
-  font-size: 15px;
+  border-radius: 12px;
+  margin: 20px 0;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  box-sizing: border-box;
   cursor: pointer;
 }
 
-.goto {
-  display: block;
-  text-align: center;
-  text-decoration: none;
-}
-
+/* 下書き結果 */
 .hidden {
   display: none;
 }
@@ -87,18 +88,4 @@ textarea {
   padding: 14px;
   border-radius: 8px;
   line-height: 1.6;
-}
-button.generate,
-button.copy,
-a.goto {
-  width: 100%;
-  display: block;
-  padding: 16px;
-  margin-top: 12px;
-  border-radius: 12px;
-  background: #d8c4a3;
-  color: #fff;
-  font-size: 16px;
-  text-align: center;
-  text-decoration: none;
 }
