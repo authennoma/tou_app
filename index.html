@@ -1,1 +1,94 @@
-<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>tou Feedback</title><link rel="stylesheet" href="style.css"></head><body><div class="container"><img src="logo.png" class="logo"><h2>本日はご来店いただきありがとうございました。<br>お客様のお声をお聞かせください。</h2><button onclick="startSurvey()">アンケートを始める</button><div id="survey" class="hidden"><h3>良かった点</h3><label><input type="checkbox" value="技術"> 技術</label><label><input type="checkbox" value="カウンセリング"> カウンセリング</label><label><input type="checkbox" value="雰囲気"> 雰囲気</label><label><input type="checkbox" value="寝落ちする気持ちよさ"> 寝落ちする気持ちよさ</label><label><input type="checkbox" value="清潔感"> 清潔感</label><label><input type="checkbox" value="髪の毛の仕上がり"> 髪の毛の仕上がり</label><textarea id="improve" placeholder="改善点があればご記入ください"></textarea><button onclick="generateReview()">口コミ文を作成</button></div><div id="result" class="hidden"><h3>口コミの下書き</h3><p id="reviewText"></p><button onclick="copyText()">コピーする</button><a href="https://g.page/r/CVZIfK2UNef1EBM/review" class="goto">Google口コミを開く</a></div></div><script src="script.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tou Head Spa - Feedback</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="container">
+
+    <img src="logo.png" class="logo" />
+
+    <h2 class="title">
+      本日はご来店いただきありがとうございました。<br>
+      お客様のお声をお聞かせください。
+    </h2>
+
+    <!-- 良かった施術 -->
+    <section class="section">
+      <h3>良かった施術を教えてください</h3>
+      <div class="checkbox-group" id="goodPoints">
+        <label><input type="checkbox" value="頭浸浴"> 頭浸浴</label>
+        <label><input type="checkbox" value="デコルテ"> デコルテ</label>
+        <label><input type="checkbox" value="フェイスマッサージ"> フェイスマッサージ</label>
+        <label><input type="checkbox" value="ヘッドマッサージ"> ヘッドマッサージ</label>
+        <label><input type="checkbox" value="リンパケア"> リンパケア</label>
+        <label><input type="checkbox" value="足湯"> 足湯</label>
+        <label><input type="checkbox" value="鎖骨ほぐし"> 鎖骨ほぐし</label>
+        <label><input type="checkbox" value="深層筋アプローチ"> 深層筋アプローチ</label>
+        <label><input type="checkbox" value="眼精疲労ケア"> 眼精疲労ケア</label>
+        <label><input type="checkbox" value="マイクロスコープ"> マイクロスコープ</label>
+      </div>
+    </section>
+
+    <!-- 変化 -->
+    <section class="section">
+      <h3>感じた変化を教えてください</h3>
+      <div class="checkbox-group" id="changes">
+        <label><input type="checkbox" value="頭が軽くなった"> 頭が軽くなった</label>
+        <label><input type="checkbox" value="目が開きやすくなった"> 目が開きやすくなった</label>
+        <label><input type="checkbox" value="顔色が明るくなった"> 顔色が明るくなった</label>
+        <label><input type="checkbox" value="姿勢が良くなった"> 姿勢が良くなった</label>
+        <label><input type="checkbox" value="呼吸が深くなった"> 呼吸が深くなった</label>
+        <label><input type="checkbox" value="むくみが取れた"> むくみが取れた</label>
+        <label><input type="checkbox" value="熟睡できた"> 熟睡できた</label>
+        <label><input type="checkbox" value="体がポカポカした"> 体がポカポカした</label>
+        <label><input type="checkbox" value="頭皮が柔らかくなった"> 頭皮が柔らかくなった</label>
+        <label><input type="checkbox" value="顔が上がった"> 顔が上がった</label>
+        <label><input type="checkbox" value="首肩のコリが楽になった"> 首肩のコリが楽になった</label>
+      </div>
+    </section>
+
+    <!-- サロンの印象 -->
+    <section class="section">
+      <h3>サロンの印象を教えてください</h3>
+      <div class="checkbox-group" id="impressions">
+        <label><input type="checkbox" value="清潔感がある"> 清潔感がある</label>
+        <label><input type="checkbox" value="落ち着いた照明"> 落ち着いた照明</label>
+        <label><input type="checkbox" value="香りが良い"> 香りが良い</label>
+        <label><input type="checkbox" value="丁寧なカウンセリング"> 丁寧なカウンセリング</label>
+        <label><input type="checkbox" value="上品な空間"> 上品な空間</label>
+        <label><input type="checkbox" value="プライベート感がある"> プライベート感がある</label>
+        <label><input type="checkbox" value="気遣いが良い"> 気遣いが良い</label>
+        <label><input type="checkbox" value="静かでリラックスできた"> 静かでリラックスできた</label>
+        <label><input type="checkbox" value="温度や湿度がちょうど良い"> 温度や湿度がちょうど良い</label>
+        <label><input type="checkbox" value="時間配分がちょうど良い"> 時間配分がちょうど良い</label>
+      </div>
+    </section>
+
+    <!-- 自由記述 -->
+    <section class="section">
+      <h3>改善点（任意）</h3>
+      <textarea id="improvement" placeholder="気になった点があればご記入ください"></textarea>
+
+      <h3>その他メッセージ（任意）</h3>
+      <textarea id="message" placeholder="スタッフへのメッセージ等があればご記入ください"></textarea>
+    </section>
+
+    <button class="generate" onclick="generateReview()">口コミ文を生成</button>
+
+    <section id="resultSection" class="hidden">
+      <h3>口コミの下書き</h3>
+      <p id="reviewText"></p>
+      <button class="copy" onclick="copyText()">コピーする</button>
+      <a class="goto" href="https://g.page/r/CVZIfK2UNef1EBM/review" target="_blank">Google口コミを開く</a>
+    </section>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
