@@ -27,10 +27,9 @@ async function generateReview() {
       body: JSON.stringify(userData)
     });
 
-    const data = await response.json();
+   const data = await response.json();
 
-    // 🔥 generate.js が返す値に合わせて text に変更！
-    document.getElementById("reviewText").innerText = data.text;
+document.getElementById("reviewText").innerText = data.review;
   } catch (error) {
     document.getElementById("reviewText").innerText =
       "口コミ生成中にエラーが発生しました。もう一度お試しください。";
