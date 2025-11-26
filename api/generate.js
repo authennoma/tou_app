@@ -6,12 +6,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const {
-      menu,
-      selectedGoodPoints,
-      selectedImprovements,
-      message,
-    } = req.body;
+    const { menu, selectedGoodPoints, selectedImprovements, message } = req.body;
 
     const prompt = `
 以下の内容からGoogle口コミ用の文章を丁寧に作成してください。
@@ -20,30 +15,28 @@ export default async function handler(req, res) {
 ${menu}
 
 【良かった点】
-${selectedGoodPoints.join("、")}
+${selectedGoodPoints?.join("、") || "なし"}
 
 【改善点】
-${selectedImprovements}
+${selectedImprovements || "なし"}
 
 【その他メッセージ】
-${message}
-    `;
+${message || "なし"}
+`;
 
-    const client = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
+    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-    const response = await client.chat.completions.create({
+    // ← 新しい書き方（ここが超重要）
+    const completion = await client.responses.create({
       model: "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }],
+      input: prompt
     });
 
-    // ← ここが重要！
-    const text = response.choices[0].message;
+    const text = completion.output[0].content[0].text;
 
     return res.status(200).json({ text });
   } catch (error) {
     console.error("API Error:", error);
-    res.status(500).json({ error: "口コミ生成に失敗しました。" });
+    return res.status(500).json({ error: "口コミ生成に失敗しました。" });
   }
 }
