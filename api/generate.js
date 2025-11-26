@@ -7,11 +7,17 @@ export default async function handler(req, res) {
   }
 
   try {
+    // ← ここが重要（Vercel は req.body を自動でパースしない）
+    const buffers = [];
+    for await (const chunk of req) buffers.push(chunk);
+    const rawBody = Buffer.concat(buffers).toString();
+    const body = JSON.parse(rawBody);
+
     const client = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
 
-    const { goodPoints, changes, impressions, improvement, message } = req.body;
+    const { goodPoints, changes, impressions, improvement, message } = body;
 
     const prompt = `
 あなたは高級ヘッドスパサロン「蕩 -tou- Head Spa」のお客様です。
@@ -41,6 +47,7 @@ export default async function handler(req, res) {
     const reviewText = completion.output_text;
 
     return res.status(200).json({ review: reviewText });
+
   } catch (error) {
     console.error("API Error:", error);
     return res.status(500).json({ error: "生成エラー" });
