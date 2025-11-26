@@ -1,11 +1,140 @@
-function startSurvey(){document.getElementById('survey').classList.remove('hidden');}
-function generateReview(){
- let checks=[...document.querySelectorAll('input[type=checkbox]:checked')].map(c=>c.value).join('、');
- let improve=document.getElementById('improve').value;
- let text=`本日はありがとうございました。${checks}が特に良く、施術後はとてもリラックスできました。${improve? "改善点:"+improve:""} また伺いたいです。`;
- document.getElementById('reviewText').innerText=text;
- document.getElementById('result').classList.remove('hidden');
+function getCheckedValues(id) {
+  return [...document.querySelectorAll(`#${id} input:checked`)].map(el => el.value);
 }
-function copyText(){
- navigator.clipboard.writeText(document.getElementById('reviewText').innerText);
+
+function generateReview() {
+  const good = getCheckedValues("goodPoints");
+  const changes = getCheckedValues("changes");
+  const feels = getCheckedValues("impressions");
+
+  const improvement = document.getElementById("improvement").value.trim();
+  const message = document.getElementById("message").value.trim();
+
+  // --- 良かった施術フレーズ ---
+  const goodPhrases = {
+    "頭浸浴": [
+      "頭浸浴の温かさがとても心地よく",
+      "頭浸浴のリラックス感が素晴らしく",
+      "頭浸浴で一気に呼吸が深くなり"
+    ],
+    "デコルテ": [
+      "デコルテの圧が絶妙で",
+      "デコルテケアがとても丁寧で",
+      "デコルテまわりの流れが良くなって"
+    ],
+    "フェイスマッサージ": [
+      "フェイスマッサージが本当に気持ちよく",
+      "フェイスラインがスッキリして",
+      "優しいフェイスマッサージが心地よく"
+    ],
+    "ヘッドマッサージ": [
+      "ヘッドマッサージがとても丁寧で",
+      "頭皮のほぐされ方が絶妙で",
+      "ヘッドマッサージの圧が最高で"
+    ],
+    "リンパケア": [
+      "リンパの流れが整っていく感覚があり",
+      "リンパケアでむくみがスッと引いて",
+      "巡りが良くなったのを感じて"
+    ],
+    "足湯": [
+      "足湯で全身が温まり",
+      "足湯の温度が心地よくて",
+      "足湯でリラックスモードに切り替わり"
+    ],
+    "鎖骨ほぐし": [
+      "鎖骨まわりがスッと軽くなり",
+      "鎖骨のつまりが流れていく感覚があり",
+      "鎖骨ほぐしが特に気持ちよく"
+    ],
+    "深層筋アプローチ": [
+      "深層筋にしっかり届く圧で",
+      "深いところまでほぐれるのが心地よく",
+      "深層筋のコリがじんわり和らぎ"
+    ],
+    "眼精疲労ケア": [
+      "眼のまわりの疲れがスッと抜けて",
+      "眼精疲労が軽くなり",
+      "視界が明るくなるようで"
+    ],
+    "マイクロスコープ": [
+      "マイクロスコープの説明がわかりやすく",
+      "頭皮状態を見ながら施術してもらえて",
+      "マイクロスコープで状態を知れたのも良くて"
+    ]
+  };
+
+  // --- 変化のフレーズ ---
+  const changePhrases = {
+    "頭が軽くなった": "施術後は頭がふわっと軽くなり",
+    "目が開きやすくなった": "視界が明るくなったように感じ",
+    "顔色が明るくなった": "顔色もワントーン明るくなり",
+    "姿勢が良くなった": "自然と姿勢が整ったような感覚があり",
+    "呼吸が深くなった": "呼吸が深くスッと入るようになり",
+    "むくみが取れた": "むくみもスッキリして",
+    "熟睡できた": "施術後はぐっすり眠れて",
+    "体がポカポカした": "身体が内側から温まり",
+    "頭皮が柔らかくなった": "頭皮も柔らかくなり",
+    "顔が上がった": "フェイスラインがキュッと上がり",
+    "首肩のコリが楽になった": "首肩の重さもふっと軽くなりました"
+  };
+
+  // --- サロンの印象 ---
+  const feelPhrases = {
+    "清潔感がある": "サロン全体もとても清潔で、",
+    "落ち着いた照明": "照明の明るさがちょうど良く、",
+    "香りが良い": "ふわっと香るアロマが心地よく、",
+    "丁寧なカウンセリング": "カウンセリングもとても丁寧で、",
+    "上品な空間": "上品で落ち着いた空間で、",
+    "プライベート感がある": "完全プライベートの特別感があり、",
+    "気遣いが良い": "細やかな気遣いも嬉しく、",
+    "静かでリラックスできた": "静かで心からリラックスでき、",
+    "温度や湿度がちょうど良い": "室温も湿度も心地よく、",
+    "時間配分がちょうど良い": "時間配分も絶妙で、"
+  };
+
+  // --- ランダム文章構成 ---
+  const introTemplates = [
+    "本日は素敵な施術をありがとうございました。",
+    "今日は丁寧な施術をしていただき、とても癒されました。",
+    "落ち着いた空間で受けた施術がとても心地よかったです。"
+  ];
+
+  const endTemplates = [
+    "またぜひお願いしたいと思います。",
+    "次回も楽しみにしています。",
+    "また伺わせていただきます。"
+  ];
+
+  // --- メイン文章生成 ---
+  const intro = introTemplates[Math.floor(Math.random() * introTemplates.length)];
+
+  const goodText = good
+    .map(g => goodPhrases[g][Math.floor(Math.random() * goodPhrases[g].length)])
+    .join("、");
+
+  const changeText = changes.map(c => changePhrases[c]).join("、");
+
+  const feelText = feels.map(f => feelPhrases[f]).join("");
+
+  let review = `${intro}${goodText}、${changeText}。${feelText}`;
+
+  if (improvement) {
+    review += `\n【改善点】${improvement}`;
+  }
+  if (message) {
+    review += `\n【メッセージ】${message}`;
+  }
+
+  review += `\n${endTemplates[Math.floor(Math.random() * endTemplates.length)]}`;
+
+  // 出力
+  document.getElementById("reviewText").innerText = review;
+  document.getElementById("resultSection").classList.remove("hidden");
+}
+
+function copyText() {
+  const text = document.getElementById("reviewText").innerText;
+  navigator.clipboard.writeText(text);
+  alert("コピーしました！");
 }
