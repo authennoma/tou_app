@@ -6,22 +6,27 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { menu, selectedGoodPoints, selectedImprovements, message } = req.body;
+    const {
+      menu,
+      selectedGoodPoints = [],   // ← デフォルトで空の配列
+      selectedImprovements = "",
+      message = "",
+    } = req.body || {};            // ← req.body が undefined の場合にも対応
 
     const prompt = `
 以下の内容からGoogle口コミ用の文章を丁寧に作成してください。
 
 【メニュー】
-${menu}
+${menu || ""}
 
 【良かった点】
-${selectedGoodPoints?.join("、") || "なし"}
+${Array.isArray(selectedGoodPoints) ? selectedGoodPoints.join("、") : ""}
 
 【改善点】
-${selectedImprovements || "なし"}
+${selectedImprovements}
 
 【その他メッセージ】
-${message || "なし"}
+${message}
     `;
 
     const client = new OpenAI({
@@ -33,7 +38,6 @@ ${message || "なし"}
       input: prompt,
     });
 
-    // ★最新の正しい取り方（これが最重要）
     const text = completion.output_text;
 
     return res.status(200).json({ text });
