@@ -24,7 +24,7 @@ export default async function handler(req, res) {
       ? selectedGoodPoints.join("、")
       : String(selectedGoodPoints || "");
 
-   const prompt = `
+   const prompt = `const prompt = `
 あなたは【ヘッドスパ専門店の口コミ文章を作成するプロライター】です。
 
 以下のお客様のアンケート内容をもとに、
@@ -35,6 +35,8 @@ export default async function handler(req, res) {
 ヘッドスパに関する内容に限定してください。
 
 --------------------------------
+■メニュー
+${menu}
 
 ■良かった点
 ${goodPointsText}
@@ -54,6 +56,8 @@ ${message}
 ・初めての人が読んでもイメージできる内容
 ・「また利用したい」と自然に思える締め方
 ・過剰な宣伝は禁止
+・もし内容が飲食店っぽくなった場合は書き換えてヘッドスパの内容に修正する
 
 では、上記情報をもとにヘッドスパの口コミ文を1つ作成してください。
 `;
+
