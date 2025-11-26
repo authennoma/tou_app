@@ -31,6 +31,12 @@ export default async function handler(req, res) {
       ? impressions.join("、")
       : String(impressions || "");
 
+    // 改善点が空の場合はプロンプトに含めない
+    const improvementBlock =
+      improvement.trim() !== ""
+        ? `\n■改善点\n${improvement}\n`
+        : ``;
+
     const prompt = `
 あなたは【ヘッドスパ専門店の口コミ文章を作成するプロライター】です。
 
@@ -50,10 +56,7 @@ ${changesText}
 
 ■印象・感想
 ${impressionsText}
-
-■改善点
-${improvement}
-
+${improvementBlock}
 ■その他メッセージ
 ${message}
 --------------------------------
