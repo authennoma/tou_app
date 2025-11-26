@@ -22,17 +22,19 @@ ${selectedImprovements || "なし"}
 
 【その他メッセージ】
 ${message || "なし"}
-`;
+    `;
 
-    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-    // ← 新しい書き方（ここが超重要）
-    const completion = await client.responses.create({
-      model: "gpt-4o-mini",
-      input: prompt
+    const client = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
     });
 
-    const text = completion.output[0].content[0].text;
+    const completion = await client.responses.create({
+      model: "gpt-4o-mini",
+      input: prompt,
+    });
+
+    // ★最新の正しい取り方（これが最重要）
+    const text = completion.output_text;
 
     return res.status(200).json({ text });
   } catch (error) {
