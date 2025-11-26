@@ -1,4 +1,3 @@
-// /api/generate.js
 import OpenAI from "openai";
 
 const client = new OpenAI({
@@ -20,18 +19,6 @@ export default async function handler(req, res) {
       message = "",
     } = req.body || {};
 
-    const goodPointsText = Array.isArray(goodPoints)
-      ? goodPoints.join("、")
-      : "";
-
-    const changesText = Array.isArray(changes)
-      ? changes.join("、")
-      : "";
-
-    const impressionsText = Array.isArray(impressions)
-      ? impressions.join("、")
-      : "";
-
     const prompt = `
 あなたは【ヘッドスパ専門店の口コミ文章を作成するプロライター】です。
 
@@ -46,13 +33,13 @@ export default async function handler(req, res) {
 ${menu}
 
 ■良かった点
-${goodPointsText}
+${goodPoints.join("、")}
 
 ■変化を感じた点
-${changesText}
+${changes.join("、")}
 
 ■体感した印象
-${impressionsText}
+${impressions.join("、")}
 
 ■改善点
 ${improvement}
