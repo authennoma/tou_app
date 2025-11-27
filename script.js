@@ -14,20 +14,38 @@ document.querySelectorAll('.stars span').forEach(star => {
 
 // 口コミ生成（外部AIを使用）
 async function generateReview() {
-  const selectedGoodPoints = getCheckedValues("goodPoints");
-  const selectedImprovements = document.getElementById("improvement").value.trim();
+  const good = getCheckedValues("goodPoints");
+  const changes = getCheckedValues("changes");
+  const feels = getCheckedValues("impressions");
+  const improvement = document.getElementById("improvement").value.trim();
   const message = document.getElementById("message").value.trim();
+  const rating = getRating();  // ★ 星の点数
 
-  // ★ API が期待しているキー名に合わせる！
+  if (rating === 0) {
+    alert("満足度の星を選んでください✨");
+    return;
+  }
+
+  // ★ 星3以下 → 投稿誘導なし
+  if (rating <= 3) {
+    document.getElementById("reviewText").innerText =
+      "アンケートのご回答ありがとうございました。いただいた内容はスタッフ全員で共有し、改善に努めてまいります。";
+    document.getElementById("resultSection").classList.remove("hidden");
+    document.querySelector(".goto").style.display = "none";
+    return;
+  }
+
+  // ★ 星4〜5 → 口コミ生成
   const userData = {
-    menu: "", // 今メニュー使ってないなら空でOK（必要なら追加）
-    selectedGoodPoints,
-    selectedImprovements,
+    rating,
+    goodPoints: good,
+    changes,
+    impressions: feels,
+    improvement,
     message
   };
 
-  // 「生成中…」表示
-  document.getElementById("reviewText").innerText = "生成中です…数秒お待ちください。";
+  document.getElementById("reviewText").innerText = "口コミ文章を生成中です…";
   document.getElementById("resultSection").classList.remove("hidden");
 
   try {
@@ -39,6 +57,10 @@ async function generateReview() {
 
     const data = await response.json();
     document.getElementById("reviewText").innerText = data.review;
+
+    // ★ 投稿誘導ボタンを表示
+    document.querySelector(".goto").style.display = "block";
+
   } catch (error) {
     document.getElementById("reviewText").innerText =
       "口コミ生成中にエラーが発生しました。もう一度お試しください。";
