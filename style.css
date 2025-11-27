@@ -61,7 +61,7 @@ textarea {
 }
 
 /* ---------------------------
-   🔥 基本ボタン（常に表示 OK）
+   🔥 通常ボタン（常時表示）
 ---------------------------- */
 button {
   width: 100%;
@@ -79,7 +79,7 @@ button {
    🔥 Google口コミ誘導ボタン（最初は非表示）
 ---------------------------- */
 .goto {
-  display: none; /* ⭐ ← ここだけが非表示でいい */
+  display: none; /* ← 必ず .goto だけ非表示！ */
   text-align: center;
   background: #d8c4a3;
   padding: 14px;
@@ -91,7 +91,7 @@ button {
   margin-top: 12px;
 }
 
-/* 下書き結果エリア */
+/* 下書きエリア */
 .hidden {
   display: none;
 }
@@ -108,7 +108,7 @@ button {
 }
 
 /* ---------------------------
-   ⭐ 高級感のある星デザイン
+   ⭐ 高級感の星デザイン
 ---------------------------- */
 .stars {
   display: flex;
@@ -120,13 +120,13 @@ button {
 .stars span {
   font-size: 28px;
   cursor: pointer;
-  color: #d6c7a2;  /* くすみゴールド */
+  color: #d6c7a2;
   transition: transform 0.2s ease, color 0.2s ease;
   opacity: 0.75;
 }
 
 .stars span.active {
-  color: #bba57a;  /* 深みゴールド */
+  color: #bba57a;
   opacity: 1;
   transform: scale(1.2);
   text-shadow: 0px 2px 4px rgba(0,0,0,0.1);
