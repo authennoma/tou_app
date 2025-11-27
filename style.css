@@ -58,21 +58,17 @@ textarea {
    🔥 ボタンはここに統一
 ---------------------------- */
 button,
-a.goto {
-  width: 100%;
-  display: block;
-  padding: 16px;
-  border: none;
-  background: #d8c4a3;
-  color: #fff;
-  border-radius: 12px;
-  margin: 20px 0;
-  font-size: 16px;
+.goto {
+  display: none; /* 最初は非表示 */
   text-align: center;
+  background: #d8c4a3;
+  padding: 14px;
+  color: #fff;
+  border-radius: 10px;
   text-decoration: none;
-  box-sizing: border-box;
-  cursor: pointer;
+  font-size: 16px;
 }
+
 
 /* 下書き結果 */
 .hidden {
