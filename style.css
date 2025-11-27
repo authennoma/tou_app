@@ -4,6 +4,7 @@ body {
   padding: 20px;
 }
 
+/* コンテナ */
 .container {
   max-width: 500px;
   margin: auto;
@@ -13,6 +14,7 @@ body {
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
 }
 
+/* ロゴ */
 .logo {
   width: 160px;
   display: block;
@@ -20,6 +22,7 @@ body {
   border-radius: 10px;
 }
 
+/* タイトル */
 .title {
   text-align: center;
   color: #333;
@@ -28,6 +31,7 @@ body {
   font-weight: 500;
 }
 
+/* セクション */
 .section {
   margin-bottom: 30px;
 }
@@ -38,11 +42,13 @@ body {
   font-weight: 600;
 }
 
+/* チェックボックス */
 .checkbox-group label {
   display: block;
   margin: 6px 0;
 }
 
+/* テキストエリア */
 textarea {
   width: 100%;
   height: 80px;
@@ -55,11 +61,25 @@ textarea {
 }
 
 /* ---------------------------
-   🔥 ボタンはここに統一
+   🔥 基本ボタン（常に表示 OK）
 ---------------------------- */
-button,
+button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  background: #d7c7a2;
+  color: #fff;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+/* ---------------------------
+   🔥 Google口コミ誘導ボタン（最初は非表示）
+---------------------------- */
 .goto {
-  display: none; /* 最初は非表示 */
+  display: none; /* ⭐ ← ここだけが非表示でいい */
   text-align: center;
   background: #d8c4a3;
   padding: 14px;
@@ -67,10 +87,11 @@ button,
   border-radius: 10px;
   text-decoration: none;
   font-size: 16px;
+  width: 100%;
+  margin-top: 12px;
 }
 
-
-/* 下書き結果 */
+/* 下書き結果エリア */
 .hidden {
   display: none;
 }
@@ -85,7 +106,10 @@ button,
   border-radius: 8px;
   line-height: 1.6;
 }
-/* 高級感のある星デザイン */
+
+/* ---------------------------
+   ⭐ 高級感のある星デザイン
+---------------------------- */
 .stars {
   display: flex;
   gap: 6px;
@@ -96,13 +120,13 @@ button,
 .stars span {
   font-size: 28px;
   cursor: pointer;
-  color: #d6c7a2;
+  color: #d6c7a2;  /* くすみゴールド */
   transition: transform 0.2s ease, color 0.2s ease;
   opacity: 0.75;
 }
 
 .stars span.active {
-  color: #bba57a;
+  color: #bba57a;  /* 深みゴールド */
   opacity: 1;
   transform: scale(1.2);
   text-shadow: 0px 2px 4px rgba(0,0,0,0.1);
