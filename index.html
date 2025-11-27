@@ -91,11 +91,17 @@
     <button class="generate" onclick="generateReview()">口コミ文を生成</button>
 
     <section id="resultSection" class="hidden">
-      <h3>口コミの下書き</h3>
-      <p id="reviewText"></p>
-      <button class="copy" onclick="copyText()">コピーする</button>
-      <a class="goto" href="https://g.page/r/CVZIfK2UNef1EBM/review" target="_blank">Google口コミを開く</a>
-    </section>
+  <h3>口コミの下書き</h3>
+  <p id="reviewText"></p>
+
+  <button class="copy" onclick="copyText()">コピーする</button>
+
+  <!-- ⭐ 星4以上のときだけ出てくるボタン ⭐ -->
+  <a class="goto" href="https://g.page/r/CVZIfK2UNef1EBM/review" target="_blank">
+    Google口コミを投稿しませんか？
+  </a>
+</section>
+
 
   </div>
 
