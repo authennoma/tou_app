@@ -91,3 +91,28 @@ function copyText() {
   navigator.clipboard.writeText(text);
   alert("コピーしました！");
 }
+<script>
+let selectedRating = 0;
+
+// ⭐ 星クリック
+document.querySelectorAll("#rating span").forEach(star => {
+  star.addEventListener("click", function () {
+    selectedRating = Number(this.dataset.value);
+
+    // 前の星も全部色をつける
+    document.querySelectorAll("#rating span").forEach(s => {
+      s.classList.remove("active");
+      if (Number(s.dataset.value) <= selectedRating) {
+        s.classList.add("active");
+      }
+    });
+
+    // ⭐ 星4以上 → Google口コミボタン表示
+    if (selectedRating >= 4) {
+      document.querySelector(".goto").style.display = "block";
+    } else {
+      document.querySelector(".goto").style.display = "none";
+    }
+  });
+});
+</script>
