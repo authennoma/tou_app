@@ -1,20 +1,25 @@
-/* 全ボタン共通デザイン */
-button,
+/* Google口コミボタンだけ非表示スタート */
 .goto {
-  display: block;         /* 横幅100%にするためのポイント */
-  width: 100%;            /* 横幅を完全に揃える */
+  display: none;
+  text-align: center;
   background: #d8c4a3;
   padding: 14px;
   color: #fff;
   border-radius: 10px;
   text-decoration: none;
   font-size: 16px;
-  border: none;
   margin-top: 16px;
-  box-sizing: border-box; /* padding含めて幅を揃える */
 }
 
-/* Google口コミボタンだけ最初は非表示 */
-.goto {
-  display: none;
+/* ボタン共通スタイル（口コミ生成 / コピーする） */
+button {
+  display: block;
+  width: 100%;
+  background: #d8c4a3;
+  padding: 14px;
+  color: #fff;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  margin-top: 16px;
 }
