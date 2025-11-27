@@ -1,6 +1,86 @@
-/* Google口コミボタンだけ非表示スタート */
+body {
+  background: #f4f1ec;
+  font-family: "Hiragino Sans", "Noto Sans JP", sans-serif;
+  padding: 20px;
+}
+
+.container {
+  max-width: 500px;
+  margin: auto;
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+.logo {
+  width: 160px;
+  display: block;
+  margin: 0 auto 20px auto;
+  border-radius: 10px;
+}
+
+.title {
+  text-align: center;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  font-weight: 500;
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+.section h3 {
+  color: #444;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.checkbox-group label {
+  display: block;
+  margin: 6px 0;
+}
+
+textarea {
+  width: 100%;
+  height: 80px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* =========⭐ 星デザイン ========= */
+.stars {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.stars span {
+  font-size: 28px;
+  cursor: pointer;
+  color: #d6c7a2;
+  opacity: 0.75;
+  transition: 0.2s ease;
+}
+
+.stars span.active {
+  color: #bba57a;
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* ========= ボタン（全て統一） ========= */
+button,
 .goto {
-  display: none;
+  display: block;
+  width: 100%;
   text-align: center;
   background: #d8c4a3;
   padding: 14px;
@@ -8,18 +88,28 @@
   border-radius: 10px;
   text-decoration: none;
   font-size: 16px;
+  border: none;
   margin-top: 16px;
+  box-sizing: border-box;
 }
 
-/* ボタン共通スタイル（口コミ生成 / コピーする） */
-button {
-  display: block;
-  width: 100%;
-  background: #d8c4a3;
+/* Google口コミボタンだけ最初は隠す */
+.goto {
+  display: none;
+}
+
+/* 結果表示エリア */
+.hidden {
+  display: none;
+}
+
+#resultSection {
+  margin-top: 30px;
+}
+
+#reviewText {
+  background: #faf7f2;
   padding: 14px;
-  color: #fff;
-  border-radius: 10px;
-  border: none;
-  font-size: 16px;
-  margin-top: 16px;
+  border-radius: 8px;
+  line-height: 1.6;
 }
