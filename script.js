@@ -1,3 +1,17 @@
+// 星の値を取得
+function getRating() {
+  const active = document.querySelector('.stars span.active');
+  return active ? Number(active.dataset.value) : 0;
+}
+
+// 星選択：クリックで active を付ける
+document.querySelectorAll('.stars span').forEach(star => {
+  star.addEventListener('click', () => {
+    document.querySelectorAll('.stars span').forEach(s => s.classList.remove('active'));
+    star.classList.add('active');
+  });
+});
+
 // 口コミ生成（外部AIを使用）
 async function generateReview() {
   const selectedGoodPoints = getCheckedValues("goodPoints");
