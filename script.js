@@ -1,78 +1,91 @@
-// 星の値を取得
-function getRating() {
-  const active = document.querySelector('.stars span.active');
-  return active ? Number(active.dataset.value) : 0;
-}
+// ⭐ グローバル変数（どこでも使える）
+let ratingValue = 0;
 
-// 星選択：クリックで active を付ける
-document.querySelectorAll('.stars span').forEach(star => {
-  star.addEventListener('click', () => {
-    document.querySelectorAll('.stars span').forEach(s => s.classList.remove('active'));
-    star.classList.add('active');
+// ⭐ 星評価（1〜クリックした星まで全点灯）
+document.addEventListener("DOMContentLoaded", () => {
+  const stars = document.querySelectorAll("#rating span");
+
+  stars.forEach((star, index) => {
+    star.addEventListener("click", () => {
+      ratingValue = index + 1;
+
+      // 全星リセット
+      stars.forEach((s) => s.classList.remove("active"));
+
+      // クリックした星まで光らせる
+      for (let i = 0; i <= index; i++) {
+        stars[i].classList.add("active");
+      }
+
+      console.log("Selected Rating:", ratingValue);
+    });
   });
 });
 
-// 口コミ生成（外部AIを使用）
+// ⭐ チェックボックス値を取得
+function getCheckedValues(id) {
+  return [...document.querySelectorAll(`#${id} input:checked`)].map(
+    (el) => el.value
+  );
+}
+
+// ⭐ 口コミ生成
 async function generateReview() {
   const good = getCheckedValues("goodPoints");
   const changes = getCheckedValues("changes");
   const feels = getCheckedValues("impressions");
+
   const improvement = document.getElementById("improvement").value.trim();
   const message = document.getElementById("message").value.trim();
-  const rating = getRating();  // ★ 星の点数
 
-  if (rating === 0) {
-    alert("満足度の星を選んでください✨");
+  // ⭐ 評価が未選択なら警告
+  if (ratingValue === 0) {
+    alert("満足度の星を選択してください。");
     return;
   }
 
-  // ★ 星3以下 → 投稿誘導なし
-  if (rating <= 3) {
-    document.getElementById("reviewText").innerText =
-      "アンケートのご回答ありがとうございました。いただいた内容はスタッフ全員で共有し、改善に努めてまいります。";
-    document.getElementById("resultSection").classList.remove("hidden");
-    document.querySelector(".goto").style.display = "none";
-    return;
-  }
-
-  // ★ 星4〜5 → 口コミ生成
+  // API に送るデータ
   const userData = {
-    rating,
     goodPoints: good,
     changes,
     impressions: feels,
     improvement,
-    message
+    message,
+    rating: ratingValue,
   };
 
-  document.getElementById("reviewText").innerText = "口コミ文章を生成中です…";
+  // 「生成中…」を表示
+  document.getElementById("reviewText").innerText =
+    "生成中です…数秒お待ちください。";
   document.getElementById("resultSection").classList.remove("hidden");
 
   try {
     const response = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userData)
+      body: JSON.stringify(userData),
     });
 
     const data = await response.json();
+
     document.getElementById("reviewText").innerText = data.review;
 
-    // ★ 投稿誘導ボタンを表示
-    document.querySelector(".goto").style.display = "block";
+    // ⭐ 星4以上 → Google口コミボタン表示
+    const gotoBtn = document.querySelector(".goto");
 
+    if (ratingValue >= 4) {
+      gotoBtn.style.display = "block";
+    } else {
+      gotoBtn.style.display = "none";
+    }
   } catch (error) {
+    console.error(error);
     document.getElementById("reviewText").innerText =
       "口コミ生成中にエラーが発生しました。もう一度お試しください。";
   }
 }
 
-// チェックされた値を取得
-function getCheckedValues(id) {
-  return [...document.querySelectorAll(`#${id} input:checked`)]
-    .map(el => el.value);
-}
-
+// ⭐ コピー機能
 function copyText() {
   const text = document.getElementById("reviewText").innerText;
   navigator.clipboard.writeText(text);
