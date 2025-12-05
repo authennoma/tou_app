@@ -54,9 +54,9 @@ textarea {
   box-sizing: border-box;
 }
 
-/* --------------------------
-   ボタン共通デザイン
---------------------------- */
+/* ============================
+   ⭐ ボタン（絶対に崩れない版）
+============================ */
 button,
 .goto {
   text-align: center;
@@ -69,17 +69,16 @@ button,
   width: 100%;
   border: none;
   display: block;
-  margin-top: 20px; /* ← ボタン同士の間隔を確保 */
-  box-sizing: border-box; /* ← 幅がズレないようにする */
+  margin-top: 20px;
+  box-sizing: border-box;  /* ← 幅統一の決め手 */
 }
 
-/* 特に <a> タグ（口コミ投稿ボタン）のみ設定 */
+/* 口コミ投稿ボタン */
 .goto {
-  display: none; /* 初期は非表示 */
+  display: none;
 }
 
-
-/* 下書きボックス */
+/* 下書きの箱 */
 #reviewText {
   background: #faf7f2;
   padding: 14px;
@@ -87,7 +86,9 @@ button,
   line-height: 1.6;
 }
 
-/* ⭐ 高級感のある星 */
+/* ============================
+   ⭐ 高級感の星
+============================ */
 .stars {
   display: flex;
   gap: 8px;
@@ -109,9 +110,10 @@ button,
   transform: scale(1.2);
   text-shadow: 0px 2px 4px rgba(0,0,0,0.15);
 }
-/* -------------------------
-   ✔ コピー完了アニメーション
--------------------------- */
+
+/* ============================
+   ⭐ コピー時アニメーション
+============================ */
 .copy {
   position: relative;
   overflow: hidden;
@@ -137,4 +139,9 @@ button,
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+/* 非表示 */
+.hidden {
+  display: none;
 }
