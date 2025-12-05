@@ -69,12 +69,15 @@ button,
   width: 100%;
   border: none;
   display: block;
+  margin-top: 20px; /* ← ボタン同士の間隔を確保 */
+  box-sizing: border-box; /* ← 幅がズレないようにする */
 }
 
-/* 初期は表示しない */
-.hidden {
-  display: none;
+/* 特に <a> タグ（口コミ投稿ボタン）のみ設定 */
+.goto {
+  display: none; /* 初期は非表示 */
 }
+
 
 /* 下書きボックス */
 #reviewText {
