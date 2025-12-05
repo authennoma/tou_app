@@ -69,40 +69,39 @@
       </div>
     </section>
 
-    <!-- 自由記述 -->
+    <!-- 改善点 -->
     <section class="section">
       <h3>改善点（任意）</h3>
       <textarea id="improvement" placeholder="気になった点があればご記入ください"></textarea>
-<section class="section">
-  <h3>本日の満足度を教えてください</h3>
-  <div class="stars" id="rating">
-    <span data-value="1">★</span>
-    <span data-value="2">★</span>
-    <span data-value="3">★</span>
-    <span data-value="4">★</span>
-    <span data-value="5">★</span>
-  </div>
-</section>
 
+      <!-- 満足度 -->
+      <h3>本日の満足度を教えてください</h3>
+      <div class="stars" id="rating">
+        <span data-value="1">★</span>
+        <span data-value="2">★</span>
+        <span data-value="3">★</span>
+        <span data-value="4">★</span>
+        <span data-value="5">★</span>
+      </div>
+
+      <!-- その他 -->
       <h3>その他メッセージ（任意）</h3>
-      <textarea id="message" placeholder="スタッフへのメッセージ等があればご記入ください"></textarea>
+      <textarea id="message" placeholder="スタッフへのメッセージがあればご記入ください"></textarea>
     </section>
 
-    <button class="generate" onclick="generateReview()">口コミ文を生成</button>
+    <button id="generateBtn" class="generate" onclick="generateReview()">口コミ文を生成</button>
 
-<section id="resultSection" class="hidden">
-  <h3>口コミの下書き</h3>
-  <p id="reviewText"></p>
+    <section id="resultSection" class="hidden">
+      <h3>口コミの下書き</h3>
+      <p id="reviewText"></p>
 
-  <button class="copy" onclick="copyText()">コピーする</button>
+      <button id="copyBtn" class="copy" onclick="copyText()">コピーする</button>
 
-  <!-- ⭐ 星4以上のときだけ出てくるボタン ⭐ -->
-  <a class="goto" href="https://g.page/r/CVZIfK2UNef1EBM/review" target="_blank">
-    Google口コミを投稿しませんか？
-  </a>
-</section>
-
-
+      <!-- ⭐ 星4以上で出すボタン -->
+      <a id="reviewLink" class="goto" href="https://g.page/r/CVZIfK2UNef1EBM/review" target="_blank">
+        Google口コミを投稿しませんか？
+      </a>
+    </section>
 
   </div>
 
