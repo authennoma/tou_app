@@ -109,3 +109,32 @@ button,
   transform: scale(1.2);
   text-shadow: 0px 2px 4px rgba(0,0,0,0.15);
 }
+/* -------------------------
+   ✔ コピー完了アニメーション
+-------------------------- */
+.copy {
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.copy.copied {
+  background: #b3a186;
+  color: #fff;
+}
+
+.copy.copied::after {
+  content: "✔ コピーしました！";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  opacity: 1;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
