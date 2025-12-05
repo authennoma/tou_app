@@ -54,33 +54,11 @@ textarea {
   box-sizing: border-box;
 }
 
-/* =========⭐ 星デザイン ========= */
-.stars {
-  display: flex;
-  gap: 6px;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-
-.stars span {
-  font-size: 28px;
-  cursor: pointer;
-  color: #d6c7a2;
-  opacity: 0.75;
-  transition: 0.2s ease;
-}
-
-.stars span.active {
-  color: #bba57a;
-  opacity: 1;
-  transform: scale(1.2);
-}
-
-/* ========= ボタン（全て統一） ========= */
+/* --------------------------
+   ボタン共通デザイン
+--------------------------- */
 button,
 .goto {
-  display: block;
-  width: 100%;
   text-align: center;
   background: #d8c4a3;
   padding: 14px;
@@ -88,28 +66,43 @@ button,
   border-radius: 10px;
   text-decoration: none;
   font-size: 16px;
+  width: 100%;
   border: none;
-  margin-top: 16px;
-  box-sizing: border-box;
+  display: block;
 }
 
-/* Google口コミボタンだけ最初は隠す */
-.goto {
-  display: none;
-}
-
-/* 結果表示エリア */
+/* 初期は表示しない */
 .hidden {
   display: none;
 }
 
-#resultSection {
-  margin-top: 30px;
-}
-
+/* 下書きボックス */
 #reviewText {
   background: #faf7f2;
   padding: 14px;
   border-radius: 8px;
   line-height: 1.6;
+}
+
+/* ⭐ 高級感のある星 */
+.stars {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.stars span {
+  font-size: 32px;
+  cursor: pointer;
+  color: #d6c7a2;
+  opacity: 0.7;
+  transition: 0.2s;
+}
+
+.stars span.active {
+  color: #bba57a;
+  opacity: 1;
+  transform: scale(1.2);
+  text-shadow: 0px 2px 4px rgba(0,0,0,0.15);
 }
