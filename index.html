@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tou Head Spa - Feedback</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=3" />
 </head>
 
 <body>
@@ -52,7 +52,7 @@
       </div>
     </section>
 
-    <!-- サロンの印象 -->
+    <!-- 印象 -->
     <section class="section">
       <h3>サロンの印象を教えてください</h3>
       <div class="checkbox-group" id="impressions">
@@ -69,12 +69,11 @@
       </div>
     </section>
 
-    <!-- 改善点 -->
+    <!-- 改善点・満足度 -->
     <section class="section">
       <h3>改善点（任意）</h3>
-      <textarea id="improvement" placeholder="気になった点があればご記入ください"></textarea>
+      <textarea id="improvement"></textarea>
 
-      <!-- 満足度 -->
       <h3>本日の満足度を教えてください</h3>
       <div class="stars" id="rating">
         <span data-value="1">★</span>
@@ -84,30 +83,27 @@
         <span data-value="5">★</span>
       </div>
 
-      <!-- その他 -->
       <h3>その他メッセージ（任意）</h3>
-      <textarea id="message" placeholder="スタッフへのメッセージがあればご記入ください"></textarea>
-
+      <textarea id="message"></textarea>
     </section>
 
-    <button id="generateBtn" class="generate" onclick="generateReview()">口コミ文を生成</button>
+    <button id="generateBtn" onclick="generateReview()">口コミ文を生成</button>
 
+    <!-- ★ 結果表示エリア ★ -->
     <section id="resultSection" class="hidden">
-  <h3>口コミの下書き</h3>
+      <h3>口コミの下書き</h3>
 
-  <p id="reviewText"></p>
+      <p id="reviewText"></p>
 
-  <button class="copy" onclick="copyText()">コピーする</button>
+      <button class="copy" onclick="copyText()">コピーする</button>
 
-  <!-- ⭐ 星4以上のときだけ出てくるボタン ⭐ -->
-  <a class="goto" href="https://g.page/r/CVZIfK2UNef1EBM/review" target="_blank">
-    Google口コミを投稿しませんか？
-  </a>
-</section>
-
+      <a class="goto" href="https://g.page/r/CVZIfK2UNef1EBM/review" target="_blank">
+        Google口コミを投稿しませんか？
+      </a>
+    </section>
 
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=3"></script>
 </body>
 </html>
