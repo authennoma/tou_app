@@ -62,6 +62,26 @@ async function generateReview() {
 
 // コピー
 function copyText() {
-  navigator.clipboard.writeText(document.getElementById("reviewText").innerText);
-  alert("コピーしました！");
+  const btn = document.querySelector(".copy");
+  const text = document.getElementById("reviewText").innerText;
+
+  navigator.clipboard.writeText(text).then(() => {
+
+    // ✔ アニメーション開始
+    btn.classList.add("copied");
+
+    // ボタンの元のテキストを退避
+    const originalText = btn.innerText;
+
+    // 一時的にテキストを空にして "✔ コピーしました" を出す
+    btn.innerText = "";
+
+    // 2秒後に元に戻す
+    setTimeout(() => {
+      btn.classList.remove("copied");
+      btn.innerText = originalText;
+    }, 2000);
+
+  });
 }
+
